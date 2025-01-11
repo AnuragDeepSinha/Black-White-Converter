@@ -13,9 +13,9 @@ CORS(app)
 # Set max content length to 50 MB (50 * 1024 * 1024 bytes)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
 
-# Define paths for uploads and processed files
-UPLOAD_FOLDER = '/app/uploads'  # Use absolute path for deployment (e.g., Render platform)
-PROCESSED_FOLDER = '/app/processed'  # Use absolute path for deployment (e.g., Render platform)
+# Define paths for uploads and processed files using '/tmp' as a writable directory
+UPLOAD_FOLDER = '/tmp/uploads'  # Use '/tmp' for writable directories
+PROCESSED_FOLDER = '/tmp/processed'  # Use '/tmp' for processed files
 
 # Make sure the directories exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -98,9 +98,3 @@ def serve_processed_file(filename):
 if __name__ == '__main__':
     # Running with debug=False for production (use gunicorn for actual production)
     app.run(debug=False, host='0.0.0.0', port=5000)
-
-
-
-
-
-

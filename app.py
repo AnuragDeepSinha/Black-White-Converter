@@ -7,15 +7,15 @@ import numpy as np
 from io import BytesIO
 from werkzeug.exceptions import RequestEntityTooLarge
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__, static_url_path='/static')  # Ensure static URL path is defined for static files
 CORS(app)
 
 # Set max content length to 50 MB (50 * 1024 * 1024 bytes)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
 
 # Define paths for uploads and processed files
-UPLOAD_FOLDER = './uploads'
-PROCESSED_FOLDER = './processed'
+UPLOAD_FOLDER = '/app/uploads'  # Use absolute path for deployment (e.g., Render platform)
+PROCESSED_FOLDER = '/app/processed'  # Use absolute path for deployment (e.g., Render platform)
 
 # Make sure the directories exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

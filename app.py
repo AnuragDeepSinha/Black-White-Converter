@@ -22,6 +22,11 @@ os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 def handle_file_too_large(error):
     return jsonify({"error": "File is too large. Max allowed size is 50 MB."}), 413
 
+@app.route('/')
+def home():
+    return render_template('index.html')  # Adjust the path if needed
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:

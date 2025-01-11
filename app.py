@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, render_template
+from flask import Flask, request, jsonify, send_file, render_template, send_from_directory
 from flask_cors import CORS
 from PIL import Image, ImageEnhance
 import os
@@ -7,14 +7,17 @@ import numpy as np
 from io import BytesIO
 from werkzeug.exceptions import RequestEntityTooLarge
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 CORS(app)
 
 # Set max content length to 50 MB (50 * 1024 * 1024 bytes)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
 
+# Define paths for uploads and processed files
 UPLOAD_FOLDER = './uploads'
 PROCESSED_FOLDER = './processed'
+
+# Make sure the directories exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
@@ -24,7 +27,7 @@ def handle_file_too_large(error):
 
 @app.route('/')
 def home():
-    return render_template('index.html')  # Adjust the path if needed
+    return render_template('index.html')  # Ensure your `index.html` is in the `templates` folder
 
 
 @app.route('/upload', methods=['POST'])
@@ -89,10 +92,13 @@ def process_video(file):
 
 @app.route('/processed/<filename>')
 def serve_processed_file(filename):
-    return send_file(os.path.join(PROCESSED_FOLDER, filename), as_attachment=True)
+    # Ensure the path to the processed file is correct
+    return send_from_directory(PROCESSED_FOLDER, filename)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Running with debug=False for production (use gunicorn for actual production)
+    app.run(debug=False, host='0.0.0.0', port=5000)
+
 
 
 
